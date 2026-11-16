@@ -45,9 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final user = _registering
           ? await widget.authService.register(
-              _name.text.trim(), _email.text.trim(), _password.text)
+          _name.text.trim(), _email.text.trim(), _password.text)
           : await widget.authService.login(
-              _email.text.trim(), _password.text);
+          _email.text.trim(), _password.text);
       if (mounted) widget.onAuthenticated(user);
     } catch (error) {
       if (mounted) setState(() => _error = error.toString());
@@ -58,6 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -69,7 +71,37 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(Icons.task_alt, size: 64),
+                  Center(
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            colorScheme.primary,
+                            colorScheme.tertiary,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.primary.withValues(alpha: 0.28),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+
+                      child: const Icon(
+                        Icons.task_alt_rounded,
+                        size: 44,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  // --- KẾT THÚC PHẦN LOGO ---
                   const SizedBox(height: 16),
                   Text(
                     _registering ? 'Tạo tài khoản' : 'Đăng nhập',
@@ -116,9 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _busy
                         ? null
                         : () => setState(() {
-                              _registering = !_registering;
-                              _error = null;
-                            }),
+                      _registering = !_registering;
+                      _error = null;
+                    }),
                     child: Text(_registering
                         ? 'Đã có tài khoản? Đăng nhập'
                         : 'Chưa có tài khoản? Đăng ký'),
